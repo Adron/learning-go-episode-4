@@ -1,94 +1,85 @@
 package main
 
-import (
-	"fmt"
-	"strconv"
-)
+import "fmt"
 
 func main() {
-	fmt.Println("Hello, let's talk composite types.")
-
-	basketOfStuff := [3]string{"The first string","second","This string."}
-	var zeeValues [2]int
-
-	for i, v := range basketOfStuff {
-		fmt.Printf("Value %d: %s\n", i, v)
+	ages := map[string]int{
+		"Peterson": 52,
+		"Sally":    22,
+		"Javovia":  15,
+		"Ben":      42,
 	}
 
-	fmt.Println(zeeValues)
+	jobAssociation := make(map[string]string)
+	jobAssociation["Peterson"] = "Engineer"
+	jobAssociation["Sally"] = "CEO"
+	jobAssociation["Jovovia"] = "Gamer"
+	jobAssociation["Ben"] = "Programmer"
 
-	if zeeValues[0] == zeeValues[1] {
-		fmt.Println("The values are the same, this doesn't instantiate like the `new` keyword.")
+	printAges(ages)
+	printJobAssociations(jobAssociation)
+
+	fmt.Println(ages)
+	fmt.Println(jobAssociation)
+	fmt.Println(jobAssociation["Jovovia"])
+	fmt.Println(jobAssociation["Frank"]) // Blank! :o
+	fmt.Println(ages["Sally"])
+
+	delete(ages, "Sally")
+
+	fmt.Println(ages)
+	fmt.Println(ages["Sally"])
+
+	delete(jobAssociation, "Jovovia")
+
+	fmt.Println(jobAssociation)
+	fmt.Println(jobAssociation["Jovovia"]) // Blank.
+
+	ages2 := map[string]int{
+		"Frank":     52,
+		"Johnson":   22,
+		"Smith":     15,
+		"Jezebelle": 42,
+	}
+
+	ages3 := map[string]int{
+		"Frank":     52,
+		"Johnson":   22,
+		"Smith":     15,
+		"Jezebelle": 42,
+	}
+
+	if equal(ages, ages2) {
+		fmt.Println("Naw, not really equal.")
 	} else {
-		fmt.Println("The way go appears to instantiate unset variable values, such as in this array is like the `new` keyword instantiation.")
+		fmt.Println("This is correct, not equal.")
 	}
 
-	zeeValues[0] = 1 + 52 * 3
-	zeeValues[1] = 9
-
-	fmt.Println(zeeValues[len(zeeValues) - 1])
-
-	type Currency int
-
-	const (
-		USD Currency = iota
-		CAN
-		EUR
-		GBP
-		JPY
-		NOK
-		SEK
-		DKK
-	)
-
-	symbol := [...]string{USD: "$", CAN: "$",  EUR: "€", GBP: "£", JPY:"¥", NOK:"kr", SEK:"kr",DKK:"kr"}
-
-	fmt.Println(EUR, symbol[EUR])
-
-	fmt.Println(JPY, symbol[JPY])
-
-	r := [...]int{99: -1}
-
-	r[36] = 425
-	r[42] = 42
-
-	fmt.Println(r[36] + r[42])
-	fmt.Println(strconv.Itoa(r[36]))
-
-	months := [...]string{1: "January", 2:"February", 3: "March", 4:"April", 12:"December"}
-
-	for _, s := range months {
-		fmt.Printf("The month: %s\n", s)
+	if equal(ages2, ages3) {
+		fmt.Println("True, these are effectively the same map values and keys.")
 	}
-
-	var runes []rune
-	for _, r := range "Language: 走" {
-		runes = append(runes, r)
-	}
-	fmt.Printf("%q \n", runes)
-
-	var x, y []int
-	for i := 0; i < 10; i++ {
-		y = appendInt(x, i)
-		fmt.Printf("%d cap=%d\t%v\n", i, cap(y), y)
-		x = y
-	}
-
 }
 
-func appendInt(x []int, i int) []int {
-	var z []int
-	zlen := len(x) + 1
-	if zlen <= cap(x) {
-		z = x[:zlen]
-	} else {
-		zcap := zlen
-		if zcap < 2* len(x) {
-			zcap = 2 * len(x)
-		}
-		z = make([]int, zlen, zcap)
-		copy(z, x)
+func printJobAssociations(associations map[string]string) {
+	for name, job := range associations {
+		fmt.Printf("%s\t%s\n", name, job)
 	}
+}
 
-	return z
+func printAges(ages map[string]int) {
+	for name, age := range ages {
+		fmt.Printf("%s\t%d\n", name, age)
+	}
+}
+
+func equal(x, y map[string]int) bool {
+	if len(x) != len(y) {
+		return false
+	}
+	for k, xv := range x {
+		if yv, ok := y[k]; !ok || yv != xv {
+			return false
+		}
+	}
+	return true
 }
