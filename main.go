@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 )
@@ -8,23 +9,37 @@ import (
 func main() {
 
 	type Employee struct {
-		ID          string
-		Name        string
-		Address     string
-		DateOfBirth time.Time
-		Job         string
-		Salary      float64
-		ManagerID   string
+		ID          string    `json:"id"`
+		Name        string    `json:"name"`
+		Address     string    `json:"address"`
+		DateOfBirth time.Time `json:"dateOfBirth"`
+		Job         string    `json:"job"`
+		Salary      float64   `json:"salary"`
+		ManagerID   string    `json:"manager-id"`
 	}
 
-	var dilbert Employee
+	var employees = []Employee{
+		{
+			ID: "64133ca9-13da-4f21-ac97-5a10553272a1",
+			Name: "Dilbert Maxmillion",
+			Salary: 520405.50,
+		},{
+			ID: "64133ca9-13da-4f21-ac97-5a10553272a1",
+			Name: "Sally Jackson",
+			Salary: 690050.32,
+			Job: "Product Architect",
+		},
+	}
 
-	dilbert.Salary = 50602.66
-	dilbert.Name = "Dilbert Maxmilliarn"
-	dilbert.Job = "Engineer Genius"
-	dilbert.Address = "That place in the cartoon."
+	fmt.Println(employees[0])
+	fmt.Println(employees[0].Salary)
+	fmt.Println(employees[0].Name)
+	fmt.Println(employees[1].Name)
 
-	fmt.Println(dilbert)
-	fmt.Println(dilbert.Salary)
-	fmt.Println(dilbert.Name)
+	data, err := json.Marshal(employees)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Printf("%s\n", data)
+
 }
